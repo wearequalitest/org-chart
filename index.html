@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dynamic Org Chart - Premium Dashboard UI</title>
+
+    <style>
+      /* Imported Orbitron for the creative Role Badges */
+      @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Orbitron:wght@700;900&display=swap");
+    </style>
+
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.0.0/css/flag-icons.min.css"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/dom-to-image-more@2.8.0/dist/dom-to-image-more.min.js"></script>
+  </head>
+  <body>
+    <div class="fixed inset-0 z-0 overflow-hidden pointer-events-none">
+      <div class="bg-moving-grid"></div>
+      <div
+        class="floating-shape orb-1 w-[300px] h-[300px] md:w-[500px] md:h-[500px]"
+      >
+        <div class="w-full h-full bg-indigo-600/30 rounded-full"></div>
+      </div>
+      <div
+        class="floating-shape orb-2 w-[250px] h-[250px] md:w-[400px] md:h-[400px]"
+      >
+        <div
+          class="w-full h-full bg-accent/20 rounded-full mix-blend-screen"
+        ></div>
+      </div>
+    </div>
+
+    <div id="torch"></div>
+    <div id="root"></div>
+
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>
