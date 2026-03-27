@@ -2,6 +2,7 @@ import { memo } from "react";
 import { motion } from "framer-motion";
 import { roleConfig } from "../constants/roleConfig";
 import { getInitials } from "../utils/formatters";
+import { GoogleIcon, QualitestIcon } from "./OrgIcons";
 
 const PersonNodeComponent = ({ person, delay, isCollapsed }) => {
   const roles = person.role
@@ -11,27 +12,41 @@ const PersonNodeComponent = ({ person, delay, isCollapsed }) => {
         .filter(Boolean)
     : [];
 
-  const getGradientStyle = (rolesList) => {
-    const colors = {
-      "Senior PGM": "#3b82f6",
-      "Account Manager": "#eab308",
-      "Delivery Manager": "#10b981",
-      DEFAULT: "#475569",
-    };
-    if (!rolesList || rolesList.length === 0)
-      return { background: colors.DEFAULT };
-    if (rolesList.length === 1)
-      return { background: colors[rolesList[0]] || colors.DEFAULT };
-    if (rolesList.length === 2)
+  const org = person.org || "";
+
+  // Get border style based on organization
+  const getOrgBorderStyle = () => {
+    const baseSize = isCollapsed ? "w-9 h-9" : "w-12 h-12";
+
+    if (org === "Google") {
+      // Google: gradient with Google colors (red, yellow, blue, green)
       return {
-        background: `linear-gradient(135deg, ${colors[rolesList[0]] || colors.DEFAULT}, ${colors[rolesList[1]] || colors.DEFAULT})`,
+        borderColor: "transparent",
+        background:
+          "conic-gradient(#EA4335, #FBBC04, #4285F4, #34A853, #EA4335)",
+        boxShadow:
+          "0 0 15px rgba(234, 67, 53, 0.4), 0 0 25px rgba(66, 133, 244, 0.3)",
       };
-    return {
-      background: `linear-gradient(135deg, ${colors[rolesList[0]] || colors.DEFAULT}, ${colors[rolesList[1]] || colors.DEFAULT}, ${colors[rolesList[2]] || colors.DEFAULT})`,
-    };
+    } else if (org === "Qualitest") {
+      // Qualitest: solid purple with enhanced visibility
+      return {
+        borderColor: "#7c3aed",
+        background: "none",
+        boxShadow:
+          "0 0 4px rgba(124, 58, 237, 0.8), 0 0 8px rgba(124, 58, 237, 0.6), inset 0 0 8px rgba(124, 58, 237, 0.5)",
+      };
+    } else {
+      // Default: grey
+      return {
+        borderColor: "#475569",
+        background: "none",
+        boxShadow:
+          "0 0 10px rgba(71, 85, 105, 0.3), inset 0 0 6px rgba(71, 85, 105, 0.2)",
+      };
+    }
   };
 
-  const borderStyle = getGradientStyle(roles);
+  const orgBorderStyle = getOrgBorderStyle();
 
   return (
     <motion.div
@@ -46,13 +61,30 @@ const PersonNodeComponent = ({ person, delay, isCollapsed }) => {
             isCollapsed ? "w-9 h-9 mb-1" : "w-12 h-12 mb-1.5"
           }`}
         >
+          {/* Org icon in top-right corner */}
+          {org && (
+            <div className="absolute -top-1 -right-1 z-20 bg-[#161624] rounded-full p-0.5 border border-[#2f2f4d]">
+              {org === "Google" ? (
+                <GoogleIcon size={isCollapsed ? 10 : 12} />
+              ) : org === "Qualitest" ? (
+                <QualitestIcon size={isCollapsed ? 10 : 12} />
+              ) : null}
+            </div>
+          )}
+
+          {/* Org-based border ring */}
           <div
-            className="absolute inset-0 rounded-full opacity-0 group-hover/row:opacity-100 transition-opacity duration-150 blur-md"
-            style={borderStyle}
-          ></div>
-          <div
-            className="relative w-full h-full rounded-full p-[2px] shadow-[0_2px_10px_rgba(0,0,0,0.5)] z-10"
-            style={borderStyle}
+            className="relative w-full h-full rounded-full p-[2px] z-10"
+            style={{
+              ...orgBorderStyle,
+              border:
+                org === "Google"
+                  ? "2px solid transparent"
+                  : org === "Qualitest"
+                    ? `3px solid ${orgBorderStyle.borderColor}`
+                    : `2px solid ${orgBorderStyle.borderColor}`,
+              backgroundClip: org === "Google" ? "padding-box" : "auto",
+            }}
           >
             <div
               className={`relative w-full h-full rounded-full bg-[#161624] flex items-center justify-center font-bold text-slate-200 transition-colors duration-150 group-hover/row:bg-[#1c1c2e] ${

@@ -9,6 +9,7 @@ export const flagMap = {
   TOK: "jp",
   SIN: "sg",
   PRT: "pt",
+  POT: "pt",
   ISR: "il",
   IND: "in",
   MEX: "mx",

@@ -7,6 +7,7 @@ export const fetchOrgChartData = async () => {
 
     const response = await fetch(appScriptUrl);
     const data = await response.json();
+    console.log("Fetched org chart data from AppScript:", data);
     return data;
   } catch (error) {
     console.warn(
