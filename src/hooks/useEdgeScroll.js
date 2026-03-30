@@ -49,26 +49,72 @@ export const useEdgeScroll = (
         const distFromTop = mouseY - rect.top;
         const distFromBottom = rect.bottom - mouseY;
 
+        // Check if container has scrollable content in each direction
+        const hasHorizontalScroll =
+          container.scrollWidth > container.clientWidth;
+        const hasVerticalScroll =
+          container.scrollHeight > container.clientHeight;
+
+        // Get edge indicators for visual feedback
+        const leftIndicator = document.querySelector(".edge-indicator-left");
+        const rightIndicator = document.querySelector(".edge-indicator-right");
+        const topIndicator = document.querySelector(".edge-indicator-top");
+        const bottomIndicator = document.querySelector(
+          ".edge-indicator-bottom",
+        );
+
         // Determine scroll direction and speed
         let scrollX = 0;
         let scrollY = 0;
 
         // Horizontal scrolling (left/right edges)
-        if (distFromLeft < edgeDistance && distFromLeft > 0) {
+        if (
+          hasHorizontalScroll &&
+          distFromLeft < edgeDistance &&
+          distFromLeft >= 0
+        ) {
           // Near left edge - scroll left
           scrollX = -maxScrollSpeed * (1 - distFromLeft / edgeDistance);
-        } else if (distFromRight < edgeDistance && distFromRight > 0) {
+          if (leftIndicator) leftIndicator.classList.add("active");
+        } else if (leftIndicator) {
+          leftIndicator.classList.remove("active");
+        }
+
+        if (
+          hasHorizontalScroll &&
+          distFromRight < edgeDistance &&
+          distFromRight >= 0
+        ) {
           // Near right edge - scroll right
           scrollX = maxScrollSpeed * (1 - distFromRight / edgeDistance);
+          if (rightIndicator) rightIndicator.classList.add("active");
+        } else if (rightIndicator) {
+          rightIndicator.classList.remove("active");
         }
 
         // Vertical scrolling (top/bottom edges)
-        if (distFromTop < edgeDistance && distFromTop > 0) {
+        if (
+          hasVerticalScroll &&
+          distFromTop < edgeDistance &&
+          distFromTop >= 0
+        ) {
           // Near top edge - scroll up
           scrollY = -maxScrollSpeed * (1 - distFromTop / edgeDistance);
-        } else if (distFromBottom < edgeDistance && distFromBottom > 0) {
+          if (topIndicator) topIndicator.classList.add("active");
+        } else if (topIndicator) {
+          topIndicator.classList.remove("active");
+        }
+
+        if (
+          hasVerticalScroll &&
+          distFromBottom < edgeDistance &&
+          distFromBottom >= 0
+        ) {
           // Near bottom edge - scroll down
           scrollY = maxScrollSpeed * (1 - distFromBottom / edgeDistance);
+          if (bottomIndicator) bottomIndicator.classList.add("active");
+        } else if (bottomIndicator) {
+          bottomIndicator.classList.remove("active");
         }
 
         // Apply scrolling if needed

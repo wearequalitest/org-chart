@@ -105,17 +105,17 @@ const HeadContainerComponent = ({
             const roleColorMap = {
               "Senior PGM": {
                 bg: "rgba(234, 67, 53, 0.02)",
-                shadow: "-6px 0 12px -4px rgba(234, 67, 53, 0.6)",
+                shadow: "inset 4px 0 10px rgba(234, 67, 53, 0.7)",
                 borderColor: "rgba(234, 67, 53, 0.7)",
               },
               "Account Manager": {
                 bg: "rgba(251, 188, 4, 0.02)",
-                shadow: "-6px 0 12px -4px rgba(251, 188, 4, 0.6)",
+                shadow: "inset 4px 0 10px rgba(251, 188, 4, 0.6)",
                 borderColor: "rgba(251, 188, 4, 0.7)",
               },
               "Delivery Manager": {
                 bg: "rgba(52, 168, 83, 0.02)",
-                shadow: "-6px 0 12px -4px rgba(52, 168, 83, 0.6)",
+                shadow: "inset 4px 0 10px rgba(52, 168, 83, 0.6)",
                 borderColor: "rgba(52, 168, 83, 0.7)",
               },
             };

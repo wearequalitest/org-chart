@@ -56,6 +56,23 @@ const LoadingScreen = () => {
 export const OrgChart = () => {
   const { data, loading } = useOrgChartData();
   const [collapsedIds, setCollapsedIds] = useState(new Set());
+  const roles = {
+    "Senior PGM": {
+      bg: "rgba(234, 67, 53, 0.02)",
+      shadow: "inset 4px 0 10px rgba(234, 67, 53, 0.7)",
+      borderColor: "rgba(234, 67, 53, 0.7)",
+    },
+    "Account Manager": {
+      bg: "rgba(251, 188, 4, 0.02)",
+      shadow: "inset 4px 0 10px rgba(251, 188, 4, 0.6)",
+      borderColor: "rgba(251, 188, 4, 0.7)",
+    },
+    "Delivery Manager": {
+      bg: "rgba(52, 168, 83, 0.02)",
+      shadow: "inset 4px 0 10px rgba(52, 168, 83, 0.6)",
+      borderColor: "rgba(52, 168, 83, 0.7)",
+    },
+  };
 
   useEffect(() => {
     // Initialize as all collapsed when data loads
@@ -168,6 +185,74 @@ export const OrgChart = () => {
       className="w-screen h-screen overflow-auto block relative z-10"
       id="chart-capture-target"
     >
+      {/* EDGE SCROLL INDICATORS */}
+      {/* Left Edge */}
+      <div className="pointer-events-none fixed left-0 top-0 h-full w-12 z-40">
+        <div className="edge-indicator edge-indicator-left h-full w-full flex items-center justify-start pl-2">
+          <svg
+            className="scroll-chevron scroll-chevron-left"
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+          >
+            <polyline points="15 18 9 12 15 6"></polyline>
+          </svg>
+        </div>
+      </div>
+
+      {/* Right Edge */}
+      <div className="pointer-events-none fixed right-0 top-0 h-full w-12 z-40">
+        <div className="edge-indicator edge-indicator-right h-full w-full flex items-center justify-end pr-2">
+          <svg
+            className="scroll-chevron scroll-chevron-right"
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+          >
+            <polyline points="9 18 15 12 9 6"></polyline>
+          </svg>
+        </div>
+      </div>
+
+      {/* Top Edge */}
+      <div className="pointer-events-none fixed top-0 left-0 w-full h-12 z-40">
+        <div className="edge-indicator edge-indicator-top w-full h-full flex items-start justify-center pt-2">
+          <svg
+            className="scroll-chevron scroll-chevron-top"
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+          >
+            <polyline points="18 15 12 9 6 15"></polyline>
+          </svg>
+        </div>
+      </div>
+
+      {/* Bottom Edge */}
+      <div className="pointer-events-none fixed bottom-0 left-0 w-full h-12 z-40">
+        <div className="edge-indicator edge-indicator-bottom w-full h-full flex items-end justify-center pb-2">
+          <svg
+            className="scroll-chevron scroll-chevron-bottom"
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+          >
+            <polyline points="6 9 12 15 18 9"></polyline>
+          </svg>
+        </div>
+      </div>
       {/* TOP LEFT LEGEND */}
       <div
         className="fixed top-3 left-3 z-50 flex flex-row gap-2 bg-[#161624]/80 backdrop-blur-xl border border-white/5 p-4 rounded-xl shadow-[0_8px_32px_rgba(0,0,0,0.5)] transition-all duration-300 hover:border-white/10 hover:bg-[#161624]"
@@ -177,18 +262,19 @@ export const OrgChart = () => {
           Roles
         </h3>
         <div className="flex flex-row gap-8 items-center">
-          {[
-            { name: "Senior Program Manager", bgColor: "#EA4335" },
-            { name: "Account Manager", bgColor: "#FBBC04" },
-            { name: "Delivery Manager", bgColor: "#34A853" },
-          ].map((role, idx) => (
+          {Object.entries(roles).map(([name, style], idx) => (
             <div key={idx} className="flex items-center gap-2.5">
               <div
-                className="w-5 h-4 rounded"
-                style={{ backgroundColor: role.bgColor }}
+                className="w-5 h-4 rounded-sm border-l"
+                style={{
+                  background: style.bg,
+                  boxShadow: style.shadow,
+                  borderLeftColor: style.borderColor,
+                }}
               ></div>
+
               <span className="text-[9.5px] font-semibold text-slate-300 tracking-wide whitespace-nowrap">
-                {role.name}
+                {name}
               </span>
             </div>
           ))}
