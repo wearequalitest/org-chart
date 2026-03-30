@@ -9,6 +9,7 @@ import {
   IconSpinner,
 } from "../utils/icons";
 import { useOrgChartData } from "../hooks/useOrgChartData";
+import { useEdgeScroll } from "../hooks/useEdgeScroll";
 import { roleConfig } from "../constants/roleConfig";
 
 const LoadingScreen = () => {
@@ -55,6 +56,15 @@ const LoadingScreen = () => {
 export const OrgChart = () => {
   const { data, loading } = useOrgChartData();
   const [collapsedIds, setCollapsedIds] = useState(new Set());
+
+  useEffect(() => {
+    // Initialize as all collapsed when data loads
+    if (data && collapsedIds.size === 0) {
+      setCollapsedIds(
+        new Set(data.flatMap((h) => h.containers.map((c) => c.id))),
+      );
+    }
+  }, [data]);
   const [isExporting, setIsExporting] = useState(false);
 
   useEffect(() => {
@@ -74,6 +84,9 @@ export const OrgChart = () => {
     window.addEventListener("mousemove", handleMouseMove, { passive: true });
     return () => window.removeEventListener("mousemove", handleMouseMove);
   }, []);
+
+  // Enable edge-detection auto-scroll
+  useEdgeScroll("chart-capture-target", 50, 8);
 
   const allContainerIds = useMemo(
     () => (data ? data.flatMap((h) => h.containers.map((c) => c.id)) : []),
@@ -155,9 +168,36 @@ export const OrgChart = () => {
       className="w-screen h-screen overflow-auto block relative z-10"
       id="chart-capture-target"
     >
-      {/* TOP LEFT CONTROLS */}
+      {/* TOP LEFT LEGEND */}
       <div
-        className="fixed top-6 left-6 z-50 flex gap-3"
+        className="fixed top-3 left-3 z-50 flex flex-row gap-2 bg-[#161624]/80 backdrop-blur-xl border border-white/5 p-4 rounded-xl shadow-[0_8px_32px_rgba(0,0,0,0.5)] transition-all duration-300 hover:border-white/10 hover:bg-[#161624]"
+        data-html2canvas-ignore
+      >
+        <h3 className="text-[10px] font-bold text-transparent bg-clip-text bg-linear-to-r from-slate-400 to-slate-200 uppercase tracking-widest border-r border-border pr-4 pb-0">
+          Roles
+        </h3>
+        <div className="flex flex-row gap-8 items-center">
+          {[
+            { name: "Senior Program Manager", bgColor: "#EA4335" },
+            { name: "Account Manager", bgColor: "#FBBC04" },
+            { name: "Delivery Manager", bgColor: "#34A853" },
+          ].map((role, idx) => (
+            <div key={idx} className="flex items-center gap-2.5">
+              <div
+                className="w-5 h-4 rounded"
+                style={{ backgroundColor: role.bgColor }}
+              ></div>
+              <span className="text-[9.5px] font-semibold text-slate-300 tracking-wide whitespace-nowrap">
+                {role.name}
+              </span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* TOP RIGHT CONTROLS */}
+      <div
+        className="fixed top-3 right-3 z-50 flex gap-3"
         data-html2canvas-ignore
       >
         <button
@@ -176,30 +216,6 @@ export const OrgChart = () => {
           {isExporting ? <IconSpinner /> : <IconCamera />}
           {isExporting ? "Capturing..." : "Screenshot"}
         </button>
-      </div>
-
-      {/* TOP RIGHT LEGEND */}
-      <div
-        className="fixed top-6 right-6 z-50 flex flex-col gap-3.5 bg-[#161624]/80 backdrop-blur-xl border border-white/5 p-4 rounded-xl shadow-[0_8px_32px_rgba(0,0,0,0.5)] transition-all duration-300 hover:border-white/10 hover:bg-[#161624]"
-        data-html2canvas-ignore
-      >
-        <h3 className="text-[10px] font-bold text-transparent bg-clip-text bg-gradient-to-r from-slate-400 to-slate-200 uppercase tracking-widest border-b border-border pb-2">
-          Role Legend
-        </h3>
-        {Object.values(roleConfig)
-          .filter((rc) => rc.short !== "ROLE")
-          .map((rc, idx) => (
-            <div key={idx} className="flex items-center gap-3">
-              <span
-                className={`flex items-center justify-center font-orbitron text-[9px] font-bold tracking-wider w-9 h-5 rounded ${rc.bg} ${rc.border} border ${rc.color} ${rc.shadow} opacity-90`}
-              >
-                {rc.short}
-              </span>
-              <span className="text-[10.5px] font-semibold text-slate-300 tracking-wide">
-                {rc.fullName}
-              </span>
-            </div>
-          ))}
       </div>
 
       {/* MAIN CHART CONTAINER */}
@@ -227,6 +243,29 @@ export const OrgChart = () => {
                       head={head}
                       isCollapsed={isHeadCollapsed}
                       delay={hIdx * 0.2}
+                      onToggleContainers={() => {
+                        const containerIds = new Set(
+                          head.containers.map((c) => c.id),
+                        );
+                        const allContainerIdsFull = new Set(
+                          data.flatMap((h) => h.containers.map((c) => c.id)),
+                        );
+                        const allHeadContainerCollapsed = head.containers.every(
+                          (c) => collapsedIds.has(c.id),
+                        );
+
+                        setCollapsedIds((prev) => {
+                          const next = new Set(prev);
+                          if (allHeadContainerCollapsed) {
+                            // Expand all containers for this head
+                            head.containers.forEach((c) => next.delete(c.id));
+                          } else {
+                            // Collapse all containers for this head
+                            head.containers.forEach((c) => next.add(c.id));
+                          }
+                          return next;
+                        });
+                      }}
                     />
                   </div>
                   <motion.div

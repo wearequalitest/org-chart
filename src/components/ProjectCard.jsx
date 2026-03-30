@@ -21,11 +21,9 @@ const ProjectCardComponent = ({ project, delay }) => (
             {project.name}
           </div>
         </div>
-        <div className="flex items-center shrink-0 bg-emerald-500/10 border border-emerald-500/20 px-1.5 py-0.5 rounded shadow-[inset_0_0_8px_rgba(16,185,129,0.1)]">
-          <div className="font-mono font-bold text-emerald-400 text-[12px]">
-            {formatShortCurrency(project.revenue)}
-          </div>
-        </div>
+        <span className="font-bold text-emerald-400 text-[13px]">
+          {formatShortCurrency(project.revenue)}
+        </span>
       </div>
 
       <div className="space-y-2 relative z-10">
@@ -50,9 +48,7 @@ const ProjectCardComponent = ({ project, delay }) => (
               <span className="text-indigo-400 opacity-80">
                 <IconUser />
               </span>
-              <span className="font-mono font-bold text-[14px]">
-                {loc.headcount}
-              </span>
+              <span className="font-bold text-[13px]">{loc.headcount}</span>
             </div>
           </div>
         ))}

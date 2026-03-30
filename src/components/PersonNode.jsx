@@ -1,23 +1,13 @@
 import { memo } from "react";
 import { motion } from "framer-motion";
-import { roleConfig } from "../constants/roleConfig";
 import { getInitials } from "../utils/formatters";
 import { GoogleIcon, QualitestIcon } from "./OrgIcons";
 
 const PersonNodeComponent = ({ person, delay, isCollapsed }) => {
-  const roles = person.role
-    ? person.role
-        .split(",")
-        .map((r) => r.trim())
-        .filter(Boolean)
-    : [];
-
   const org = person.org || "";
 
   // Get border style based on organization
   const getOrgBorderStyle = () => {
-    const baseSize = isCollapsed ? "w-9 h-9" : "w-12 h-12";
-
     if (org === "Google") {
       // Google: gradient with Google colors (red, yellow, blue, green)
       return {
@@ -98,30 +88,12 @@ const PersonNodeComponent = ({ person, delay, isCollapsed }) => {
 
         <div className="flex flex-col items-center w-full mt-1">
           <span
-            className={`font-semibold text-slate-200 text-center leading-tight whitespace-normal break-words w-full group-hover/row:bg-clip-text group-hover/row:text-transparent group-hover/row:bg-gradient-to-r group-hover/row:from-accent group-hover/row:to-indigo-400 transition-all duration-150 ${
-              isCollapsed ? "text-[9px]" : "text-[11px]"
+            className={`font-semibold text-slate-200 text-center leading-tight whitespace-nowrap text-ellipsis overflow-hidden w-full group-hover/row:bg-clip-text group-hover/row:text-transparent group-hover/row:bg-gradient-to-r group-hover/row:from-accent group-hover/row:to-indigo-400 transition-all duration-150 ${
+              isCollapsed ? "text-[8px]" : "text-[11px]"
             }`}
           >
             {person.name}
           </span>
-
-          {roles.length > 0 && (
-            <div className="flex flex-wrap justify-center gap-1 mt-1 w-full pointer-events-none">
-              {roles.map((r, i) => {
-                const rc = roleConfig[r] || roleConfig["DEFAULT"];
-                return (
-                  <span
-                    key={i}
-                    className={`flex items-center justify-center font-orbitron font-bold tracking-wider leading-none py-[3px] border rounded ${rc.shadow} transition-all duration-150 ${rc.bg} ${rc.border} ${rc.color} group-hover/row:brightness-125 ${
-                      isCollapsed ? "text-[7px] px-1" : "text-[8px] px-1.5"
-                    }`}
-                  >
-                    {rc.short}
-                  </span>
-                );
-              })}
-            </div>
-          )}
         </div>
       </div>
     </motion.div>

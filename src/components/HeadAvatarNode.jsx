@@ -3,14 +3,22 @@ import { motion } from "framer-motion";
 import { getInitials } from "../utils/formatters";
 import { GoogleIcon } from "./OrgIcons";
 
-const HeadAvatarNodeComponent = ({ head, isCollapsed, delay }) => (
+const HeadAvatarNodeComponent = ({
+  head,
+  isCollapsed,
+  delay,
+  onToggleContainers,
+}) => (
   <motion.div
     initial={{ scale: 0, opacity: 0 }}
     animate={{ scale: 1, opacity: 1 }}
     transition={{ delay, type: "spring", stiffness: 150, damping: 15 }}
     className="z-20 relative"
   >
-    <div className="flex flex-col items-center justify-center cursor-pointer hover:-translate-y-1.5 hover:scale-105 transition-all duration-150 ease-out group">
+    <div
+      className="flex flex-col items-center justify-center cursor-pointer hover:-translate-y-1.5 hover:scale-105 transition-all duration-150 ease-out group"
+      onClick={onToggleContainers}
+    >
       <div
         className={`relative transition-all duration-300 ${
           isCollapsed ? "w-12 h-12 mb-1" : "w-16 h-16 mb-3"

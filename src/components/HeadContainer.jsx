@@ -14,6 +14,7 @@ import {
   calculateTotalHeadcount,
   formatShortCurrency,
 } from "../utils/formatters";
+import { roleConfig } from "../constants/roleConfig";
 
 const HeadContainerComponent = ({
   container,
@@ -37,7 +38,10 @@ const HeadContainerComponent = ({
       transition={{ delay: delay, duration: 0.6, ease: "easeOut" }}
       className="flex flex-col flex-1 w-full h-full"
     >
-      <div className="flex flex-col flex-1 w-full bg-[#161624]/60 backdrop-blur-[10px] border border-indigo-500/20 rounded-xl shadow-[0_4px_25px_rgba(99,102,241,0.15)] relative hover:-translate-y-2 hover:border-indigo-400/60 hover:shadow-[0_15px_50px_rgba(99,102,241,0.4)] transition-all duration-500 overflow-hidden">
+      <div
+        className="flex flex-col flex-1 w-full glass-card rounded-2xl relative hover:-translate-y-2 hover:shadow-[0_8px_32px_rgba(99,102,241,0.4)] transition-all duration-500 overflow-hidden"
+        style={{ borderColor: "rgba(74, 79, 105, 0.5)" }}
+      >
         <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-white/20 to-transparent pointer-events-none"></div>
 
         {/* INDIVIDUAL TOGGLE HEADER - FIXED TRUNCATION */}
@@ -83,23 +87,84 @@ const HeadContainerComponent = ({
 
         <div className="flex flex-col w-full border-b border-border/50 relative z-10">
           {(container.levels || []).map((level, idx) => {
+            // Determine the primary role in this level for bg coloring
+            const levelRoles =
+              level
+                ?.flatMap((person) =>
+                  person.role
+                    ? person.role.split(",").map((r) => r.trim())
+                    : [],
+                )
+                .filter(Boolean) || [];
+            const primaryRole = levelRoles[0];
+            const rc = primaryRole
+              ? roleConfig[primaryRole] || roleConfig["DEFAULT"]
+              : roleConfig["DEFAULT"];
+
+            // Use Google colors with glass effect borders
+            const roleColorMap = {
+              "Senior PGM": {
+                bg: "rgba(234, 67, 53, 0.02)",
+                shadow: "-6px 0 12px -4px rgba(234, 67, 53, 0.6)",
+                borderColor: "rgba(234, 67, 53, 0.7)",
+              },
+              "Account Manager": {
+                bg: "rgba(251, 188, 4, 0.02)",
+                shadow: "-6px 0 12px -4px rgba(251, 188, 4, 0.6)",
+                borderColor: "rgba(251, 188, 4, 0.7)",
+              },
+              "Delivery Manager": {
+                bg: "rgba(52, 168, 83, 0.02)",
+                shadow: "-6px 0 12px -4px rgba(52, 168, 83, 0.6)",
+                borderColor: "rgba(52, 168, 83, 0.7)",
+              },
+            };
+            const rowStyle = roleColorMap[primaryRole] || {
+              bg: "rgba(71, 85, 105, 0.01)",
+              shadow:
+                "inset 0 0 30px rgba(71, 85, 105, 0.08), -8px 0 20px rgba(71, 85, 105, 0.2)",
+              borderColor: "rgba(71, 85, 105, 0.4)",
+            };
+
             return (
               <div
                 key={idx}
-                className={`relative flex justify-around items-start w-full border-b border-b-red-500/10 bg-red-500/[0.015] hover:bg-red-500/[0.03] group/row transition-all duration-300 ${
+                className={`relative flex justify-around items-start w-full group/row transition-all duration-300 border-l-4 ${
                   isCollapsed
                     ? "min-h-[70px] pt-3 pb-2"
                     : "min-h-[90px] pt-4 pb-3"
                 }`}
+                style={{
+                  background: rowStyle.bg,
+                  boxShadow: rowStyle.shadow,
+                  borderLeftColor: rowStyle.borderColor,
+                }}
               >
-                {(level || []).map((person, pIdx) => (
-                  <PersonNode
-                    key={pIdx}
-                    person={person}
-                    delay={delay + 0.3 + idx * 0.1}
-                    isCollapsed={isCollapsed}
-                  />
-                ))}
+                {/* Enhanced row highlight with stronger effect on hover */}
+                <div
+                  className="absolute inset-0 opacity-0 group-hover/row:opacity-100 transition-opacity duration-300 z-0 pointer-events-none rounded-sm"
+                  style={{
+                    background:
+                      primaryRole === "Senior PGM"
+                        ? "rgba(234, 67, 53, 0.20)"
+                        : primaryRole === "Account Manager"
+                          ? "rgba(251, 188, 4, 0.20)"
+                          : primaryRole === "Delivery Manager"
+                            ? "rgba(52, 168, 83, 0.20)"
+                            : "rgba(71, 85, 105, 0.10)",
+                    backdropFilter: "blur(3px)",
+                  }}
+                ></div>
+                <div className="relative z-10 flex w-full justify-around items-start">
+                  {(level || []).map((person, pIdx) => (
+                    <PersonNode
+                      key={pIdx}
+                      person={person}
+                      delay={delay + 0.3 + idx * 0.1}
+                      isCollapsed={isCollapsed}
+                    />
+                  ))}
+                </div>
               </div>
             );
           })}
@@ -158,15 +223,10 @@ const HeadContainerComponent = ({
                 Total Revenue
               </span>
             )}
-            <div
-              className={`flex items-center gap-1.5 bg-emerald-500/10 border border-emerald-500/20 rounded shadow-[inset_0_0_8px_rgba(16,185,129,0.1)] transition-all ${
-                isCollapsed ? "px-1.5 py-0.5" : "px-2 py-0.5"
-              }`}
-              title="Total Revenue"
-            >
+            <div className="flex items-center gap-1.5" title="Total Revenue">
               <span
-                className={`font-bold font-mono text-emerald-400 leading-none transition-all ${
-                  isCollapsed ? "text-[11px]" : "text-[14px]"
+                className={`font-bold text-emerald-400 leading-none transition-all ${
+                  isCollapsed ? "text-xs" : "text-base"
                 }`}
               >
                 {formatShortCurrency(totalRev)}
