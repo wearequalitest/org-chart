@@ -1,0 +1,61 @@
+name: Deploy to GCP
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  deploy:
+    name: Build and Deploy
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build application
+        run: npm run build
+
+      - name: Authenticate to GCP
+        uses: google-github-actions/auth@v3
+        with:
+          workload_identity_provider: projects/167154731583/locations/global/workloadIdentityPools/github-actions-pool/providers/github-provider
+          service_account: github-actions-deployer@smartstakeholdersearch.iam.gserviceaccount.com
+
+      - name: Setup gcloud CLI
+        uses: google-github-actions/setup-gcloud@v3
+
+      - name: Upload files to GCS
+        run: |
+          gsutil -m rsync -r -d dist/ gs://qt-org-chart-qualitest
+
+      - name: Set cache headers on assets
+        run: |
+          gsutil -m setmeta \
+            -h "Cache-Control:public, max-age=31536000, immutable" \
+            "gs://qt-org-chart-qualitest/assets/**" || true
+          gsutil setmeta \
+            -h "Cache-Control:no-cache, no-store, must-revalidate" \
+            gs://qt-org-chart-qualitest/index.html
+
+      - name: Invalidate CDN cache
+        run: |
+          gcloud compute url-maps invalidate-cdn-cache qualitest-urlmap \
+            --path="/*" \
+            --host=qt-org-chart.qualitest.info \
+            --project=smartstakeholdersearch
