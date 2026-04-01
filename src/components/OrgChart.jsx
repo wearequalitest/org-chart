@@ -280,10 +280,11 @@ export const OrgChart = () => {
                 }}
               >
                 <span
-                  className="text-[8px] font-black uppercase tracking-wider"
+                  className="text-[9px] font-black uppercase tracking-wider"
                   style={{
-                    color: role.color,
-                    fontFamily: "Orbitron, sans-serif",
+                    // color: role.color,
+                    color: "white",
+                    // fontFamily: "Orbitron, sans-serif",
                     fontWeight: 900,
                   }}
                 >
