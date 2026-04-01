@@ -40,15 +40,14 @@ const PersonNodeComponent = ({ person, delay, isCollapsed }) => {
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 15 }}
+      initial={{ opacity: 1, y: 0 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ delay, duration: 0.4, ease: "easeOut" }}
       className="flex flex-col flex-1 min-w-0 z-10"
     >
-      <div className="flex flex-col items-center justify-start p-1 flex-1 min-w-0 cursor-pointer hover:-translate-y-1.5 hover:scale-105 transition-all duration-150 ease-out">
+      <div className="flex flex-col items-center justify-start py-2 flex-1 min-w-0 hover:-translate-y-1.5 hover:scale-105 transition-all duration-150 ease-out">
         <div
           className={`relative shrink-0 flex items-center justify-center transition-all duration-300 ${
-            isCollapsed ? "w-9 h-9 mb-1" : "w-12 h-12 mb-1.5"
+            isCollapsed ? "w-10 h-10 mb-1" : "w-12 h-12 mb-1.5"
           }`}
         >
           {/* Org icon in top-right corner */}
@@ -88,8 +87,9 @@ const PersonNodeComponent = ({ person, delay, isCollapsed }) => {
 
         <div className="flex flex-col items-center w-full mt-1">
           <span
+            title={person.name}
             className={`font-semibold text-slate-200 text-center leading-tight whitespace-nowrap text-ellipsis overflow-hidden w-full group-hover/row:bg-clip-text group-hover/row:text-transparent group-hover/row:bg-gradient-to-r group-hover/row:from-accent group-hover/row:to-indigo-400 transition-all duration-150 ${
-              isCollapsed ? "text-[8px]" : "text-[11px]"
+              isCollapsed ? "text-[10px]" : "text-[13px]"
             }`}
           >
             {person.name}

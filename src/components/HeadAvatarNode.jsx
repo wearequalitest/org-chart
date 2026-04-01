@@ -16,7 +16,7 @@ const HeadAvatarNodeComponent = ({
     className="z-20 relative"
   >
     <div
-      className="flex flex-col items-center justify-center cursor-pointer hover:-translate-y-1.5 hover:scale-105 transition-all duration-150 ease-out group"
+      className="flex flex-col items-center justify-center cursor-pointer hover:-translate-y-1.5 hover:scale-105 transition-all duration-150 ease-out group animate-pulse-subtle"
       onClick={onToggleContainers}
     >
       <div

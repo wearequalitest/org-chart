@@ -1,10 +1,8 @@
 export const formatShortCurrency = (amount) => {
-  if (!amount) return "$0";
-  if (amount >= 1000000)
-    return "$" + (amount / 1000000).toFixed(1).replace(/\.0$/, "") + "M";
-  if (amount >= 1000)
-    return "$" + (amount / 1000).toFixed(1).replace(/\.0$/, "") + "K";
-  return "$" + amount;
+  if (!amount) return "$0.0";
+  if (amount >= 1000000) return "$" + (amount / 1000000).toFixed(1) + "M";
+  if (amount >= 1000) return "$" + (amount / 1000).toFixed(1) + "K";
+  return "$" + amount.toFixed(1);
 };
 
 export const calculateTotalRevenue = (projects) =>

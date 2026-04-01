@@ -72,7 +72,7 @@ const HeadContainerComponent = ({
                 onToggle();
               }}
               title={isCollapsed ? "Expand Container" : "Collapse Container"}
-              className={`flex items-center justify-center shrink-0 rounded bg-indigo-500/20 hover:bg-indigo-500/40 border border-indigo-500/30 hover:border-indigo-400 text-indigo-300 hover:text-white transition-all shadow-[0_0_8px_rgba(99,102,241,0.2)] cursor-pointer ${
+              className={`flex items-center justify-center shrink-0 rounded bg-gradient-to-br from-indigo-500/40 to-indigo-600/40 hover:from-indigo-500/60 hover:to-indigo-600/60 border border-indigo-400/50 hover:border-indigo-300 text-indigo-200 hover:text-white transition-all shadow-[0_0_12px_rgba(99,102,241,0.5)] hover:shadow-[0_0_20px_rgba(99,102,241,0.8)] cursor-pointer ${
                 isCollapsed ? "w-5 h-5" : "w-6 h-6"
               }`}
             >
@@ -97,26 +97,29 @@ const HeadContainerComponent = ({
                 )
                 .filter(Boolean) || [];
             const primaryRole = levelRoles[0];
-            const rc = primaryRole
-              ? roleConfig[primaryRole] || roleConfig["DEFAULT"]
-              : roleConfig["DEFAULT"];
 
             // Use Google colors with glass effect borders
             const roleColorMap = {
               "Senior PGM": {
                 bg: "rgba(234, 67, 53, 0.02)",
-                shadow: "inset 4px 0 10px rgba(234, 67, 53, 0.7)",
+                shadow: "inset 0px -2px 5px rgba(234, 67, 53, 0.7)",
                 borderColor: "rgba(234, 67, 53, 0.7)",
+                label: "PGM",
+                fullName: "Senior PGM",
               },
               "Account Manager": {
                 bg: "rgba(251, 188, 4, 0.02)",
-                shadow: "inset 4px 0 10px rgba(251, 188, 4, 0.6)",
+                shadow: "inset 0px -2px 5px rgba(251, 188, 4, 0.6)",
                 borderColor: "rgba(251, 188, 4, 0.7)",
+                label: "AM",
+                fullName: "Account Manager",
               },
               "Delivery Manager": {
                 bg: "rgba(52, 168, 83, 0.02)",
-                shadow: "inset 4px 0 10px rgba(52, 168, 83, 0.6)",
+                shadow: "inset 0px -2px 5px rgba(52, 168, 83, 0.6)",
                 borderColor: "rgba(52, 168, 83, 0.7)",
+                label: "DM",
+                fullName: "Delivery Manager",
               },
             };
             const rowStyle = roleColorMap[primaryRole] || {
@@ -124,12 +127,14 @@ const HeadContainerComponent = ({
               shadow:
                 "inset 0 0 30px rgba(71, 85, 105, 0.08), -8px 0 20px rgba(71, 85, 105, 0.2)",
               borderColor: "rgba(71, 85, 105, 0.4)",
+              label: "ROLE",
+              fullName: "Unknown Role",
             };
 
             return (
               <div
                 key={idx}
-                className={`relative flex justify-around items-start w-full group/row transition-all duration-300 border-l-4 ${
+                className={`relative flex justify-around items-start w-full group/row transition-all duration-300  ${
                   isCollapsed
                     ? "min-h-[70px] pt-3 pb-2"
                     : "min-h-[90px] pt-4 pb-3"
@@ -155,6 +160,52 @@ const HeadContainerComponent = ({
                     backdropFilter: "blur(3px)",
                   }}
                 ></div>
+
+                {/* Role Label Badge - Absolute Positioned */}
+                <div className="absolute left-1 top-1 z-20 shrink-0">
+                  <div
+                    className="px-1 rounded-sm flex items-center justify-center border"
+                    title={rowStyle.fullName || rowStyle.label}
+                    style={{
+                      background:
+                        primaryRole === "Senior PGM"
+                          ? "rgba(234, 67, 53, 0.15)"
+                          : primaryRole === "Account Manager"
+                            ? "rgba(251, 188, 4, 0.15)"
+                            : primaryRole === "Delivery Manager"
+                              ? "rgba(52, 168, 83, 0.15)"
+                              : "rgba(71, 85, 105, 0.1)",
+                      borderColor:
+                        primaryRole === "Senior PGM"
+                          ? "rgba(234, 67, 53, 0.4)"
+                          : primaryRole === "Account Manager"
+                            ? "rgba(251, 188, 4, 0.4)"
+                            : primaryRole === "Delivery Manager"
+                              ? "rgba(52, 168, 83, 0.4)"
+                              : "rgba(71, 85, 105, 0.2)",
+                      boxShadow:
+                        primaryRole === "Senior PGM"
+                          ? "0 2px 8px rgba(234, 67, 53, 0.3), inset 0 1px 2px rgba(234, 67, 53, 0.2)"
+                          : primaryRole === "Account Manager"
+                            ? "0 2px 8px rgba(251, 188, 4, 0.3), inset 0 1px 2px rgba(251, 188, 4, 0.2)"
+                            : primaryRole === "Delivery Manager"
+                              ? "0 2px 8px rgba(52, 168, 83, 0.3), inset 0 1px 2px rgba(52, 168, 83, 0.2)"
+                              : "0 2px 8px rgba(71, 85, 105, 0.2), inset 0 1px 2px rgba(71, 85, 105, 0.1)",
+                    }}
+                  >
+                    <span
+                      className="text-[8px] font-black uppercase tracking-wider"
+                      style={{
+                        color: "white",
+                        fontFamily: "Orbitron, sans-serif",
+                        fontWeight: 900,
+                      }}
+                    >
+                      {rowStyle.label}
+                    </span>
+                  </div>
+                </div>
+
                 <div className="relative z-10 flex w-full justify-around items-start">
                   {(level || []).map((person, pIdx) => (
                     <PersonNode

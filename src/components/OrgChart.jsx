@@ -255,26 +255,43 @@ export const OrgChart = () => {
       </div>
       {/* TOP LEFT LEGEND */}
       <div
-        className="fixed top-3 left-3 z-50 flex flex-row gap-2 bg-[#161624]/80 backdrop-blur-xl border border-white/5 p-4 rounded-xl shadow-[0_8px_32px_rgba(0,0,0,0.5)] transition-all duration-300 hover:border-white/10 hover:bg-[#161624]"
+        className="fixed top-3 left-3 z-50 flex flex-row gap-4 items-center bg-[#161624]/80 backdrop-blur-xl border border-white/5 p-3 rounded-xl shadow-[0_8px_32px_rgba(0,0,0,0.5)] transition-all duration-300 hover:border-white/10 hover:bg-[#161624]"
         data-html2canvas-ignore
       >
-        <h3 className="text-[10px] font-bold text-transparent bg-clip-text bg-linear-to-r from-slate-400 to-slate-200 uppercase tracking-widest border-r border-border pr-4 pb-0">
+        <h3 className="text-[10px] font-bold text-transparent bg-clip-text bg-linear-to-r from-slate-400 to-slate-200 uppercase tracking-widest shrink-0">
           Roles
         </h3>
-        <div className="flex flex-row gap-8 items-center">
-          {Object.entries(roles).map(([name, style], idx) => (
-            <div key={idx} className="flex items-center gap-2.5">
+        <div className="flex flex-row gap-4">
+          {[
+            { label: "PGM", color: "#EA4335", fullName: "Senior PGM" },
+            { label: "AM", color: "#FBBC04", fullName: "Account Manager" },
+            { label: "DM", color: "#34A853", fullName: "Delivery Manager" },
+          ].map((role, idx) => (
+            <div
+              key={idx}
+              className="flex items-center gap-2 whitespace-nowrap"
+            >
               <div
-                className="w-5 h-4 rounded-sm border-l"
+                className="p-1 rounded-md flex items-center justify-center border shrink-0"
                 style={{
-                  background: style.bg,
-                  boxShadow: style.shadow,
-                  borderLeftColor: style.borderColor,
+                  background: role.color + "15",
+                  borderColor: role.color + "40",
+                  boxShadow: `0 2px 8px ${role.color}30, inset 0 1px 2px ${role.color}20`,
                 }}
-              ></div>
-
-              <span className="text-[9.5px] font-semibold text-slate-300 tracking-wide whitespace-nowrap">
-                {name}
+              >
+                <span
+                  className="text-[8px] font-black uppercase tracking-wider"
+                  style={{
+                    color: role.color,
+                    fontFamily: "Orbitron, sans-serif",
+                    fontWeight: 900,
+                  }}
+                >
+                  {role.label}
+                </span>
+              </div>
+              <span className="text-[10px] lg:text-[12px] font-semibold text-slate-300 tracking-wide whitespace-nowrap">
+                {role.fullName}
               </span>
             </div>
           ))}
@@ -358,7 +375,7 @@ export const OrgChart = () => {
                     initial={{ height: 0 }}
                     animate={{ height: 30 }}
                     transition={{ delay: 0.2, duration: 0.5 }}
-                    className="w-[2px] bg-gradient-to-b from-primary to-accent/50 shadow-[0_0_10px_rgba(99,102,241,0.5)]"
+                    className="w-[2px] bg-cyan-400 shadow-[0_0_12px_rgba(34,211,238,0.5)]"
                   ></motion.div>
 
                   <div
@@ -382,7 +399,7 @@ export const OrgChart = () => {
                             : 128,
                         }}
                         transition={{ duration: 0.5, ease: "easeInOut" }}
-                        className="absolute top-0 h-[2px] bg-gradient-to-r from-accent/50 via-primary to-accent/50 origin-center shadow-[0_0_10px_rgba(99,102,241,0.4)]"
+                        className="absolute top-0 h-[2px] bg-cyan-400 origin-center shadow-[0_0_15px_rgba(34,211,238,0.6)]"
                       ></motion.div>
                     )}
 
@@ -400,7 +417,7 @@ export const OrgChart = () => {
                           transition={{ duration: 0.5, ease: "easeInOut" }}
                           className="relative flex flex-col"
                         >
-                          <div className="absolute top-[-24px] left-1/2 -translate-x-1/2 w-[2px] h-[24px] bg-gradient-to-b from-primary/80 to-transparent"></div>
+                          <div className="absolute top-[-24px] left-1/2 -translate-x-1/2 w-[2px] h-[24px] bg-cyan-400 shadow-[0_0_10px_rgba(34,211,238,0.5)]"></div>
                           <HeadContainer
                             container={container}
                             delay={0.6 + hIdx * 0.2 + cIdx * 0.15}
