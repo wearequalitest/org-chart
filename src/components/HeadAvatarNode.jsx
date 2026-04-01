@@ -58,7 +58,7 @@ const HeadAvatarNodeComponent = ({
         </div>
       </div>
       <h2
-        className={`font-bold bg-clip-text text-transparent bg-gradient-to-r from-slate-100 to-slate-400 text-center leading-tight tracking-wide group-hover:from-accent group-hover:to-primary transition-all duration-300 ${
+        className={`font-bold text-white text-center leading-tight tracking-wide group-hover:from-accent group-hover:to-primary transition-all duration-300 ${
           isCollapsed ? "text-[11px]" : "text-[14px]"
         }`}
       >

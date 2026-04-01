@@ -76,7 +76,7 @@ const PersonNodeComponent = ({ person, delay, isCollapsed }) => {
             }}
           >
             <div
-              className={`relative w-full h-full rounded-full bg-[#161624] flex items-center justify-center font-bold text-slate-200 transition-colors duration-150 group-hover/row:bg-[#1c1c2e] ${
+              className={`relative w-full h-full rounded-full bg-[#161624] flex items-center justify-center font-bold text-white transition-colors duration-150 group-hover/row:bg-[#1c1c2e] ${
                 isCollapsed ? "text-[9px]" : "text-[11px]"
               }`}
             >
@@ -88,7 +88,7 @@ const PersonNodeComponent = ({ person, delay, isCollapsed }) => {
         <div className="flex flex-col items-center w-full mt-1">
           <span
             title={person.name}
-            className={`font-semibold text-slate-200 text-center leading-tight whitespace-nowrap text-ellipsis overflow-hidden w-full group-hover/row:bg-clip-text group-hover/row:text-transparent group-hover/row:bg-gradient-to-r group-hover/row:from-accent group-hover/row:to-indigo-400 transition-all duration-150 ${
+            className={`font-semibold text-white text-center leading-tight whitespace-nowrap text-ellipsis overflow-hidden w-full group-hover/row:bg-clip-text group-hover/row:text-transparent group-hover/row:bg-gradient-to-r group-hover/row:from-accent group-hover/row:to-indigo-400 transition-all duration-150 ${
               isCollapsed ? "text-[10px]" : "text-[13px]"
             }`}
           >
